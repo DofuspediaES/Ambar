@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa isométrico interactivo</title>
+  <style>
+    body { background: #222; color: #eee; font-family: sans-serif; }
+    .mapa-container { position: relative; display: inline-block; }
+    #mapa-img { display: block; max-width: 100%; }
+    .casilla {
+      position: absolute;
+      width: 48px;  /* Ajusta al tamaño de tu casilla */
+      height: 48px; /* Debe ser igual para un rombo perfecto */
+      background: rgba(0,255,255,0.12);
+      border: 1.5px solid #0ff3;
+      cursor: pointer;
+      transition: background 0.3s, border 0.3s;
+      pointer-events: auto;
+      /* Crea la forma de rombo */
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      /* Opcional para suavizar bordes */
+      box-sizing: border-box;
+    }
+    .casilla.seleccionada {
+      background: rgba(255,255,0,0.45);
+      border: 2.5px solid #FFD700;
+    }
+    .casilla.monstruo-Malseto { background: rgba(50, 200, 50, 0.5);}
+    .casilla.monstruo-Malpincho { background: rgba(200,50,50,0.5);}
+    .casilla.monstruo-Maltrío { background: rgba(50,50,200,0.5);}
+    .casilla.monstruo-Maltuerzo { background: rgba(200,200,50,0.5);}
+    .casilla.temporal { box-shadow: 0 0 18px 8px #0ff; }
+  </style>
+</head>
+<body>
+  <h1>Mapa Dofus: Casillas isométricas interactivas</h1>
+  <div class="mapa-container" id="mapa-container">
+    <img src="imagen.png" id="mapa-img" alt="Mapa Dofus"/>
+    <!-- Las casillas se agregan con JS -->
+  </div>
+  <script>
+    // Ejemplo de posiciones: pon aquí los centros de cada rombo
+    const casillas = [
+      {top: 110, left: 200},
+      {top: 150, left: 224},
+      {top: 190, left: 248},
+      {top: 230, left: 272},
+      // ...agrega los centros de cada casilla isométrica
+    ];
+    const monstruosPorCasilla = Array(casillas.length).fill("");
+
+    const mapaContainer = document.getElementById("mapa-container");
+    casillas.forEach((pos, idx) => {
+      const div = document.createElement("div");
+      div.className = "casilla";
+      // Ajustar -24 para centrar el rombo en el punto central
+      div.style.top = (pos.top - 24) + "px";
+      div.style.left = (pos.left - 24) + "px";
+      div.dataset.idx = idx;
+      div.onclick = () => seleccionarCasilla(idx, div);
+      mapaContainer.appendChild(div);
+    });
+
+    let casillaSeleccionada = null;
+    function seleccionarCasilla(idx, div) {
+      document.querySelectorAll(".casilla.seleccionada").forEach(d => d.classList.remove("seleccionada"));
+      div.classList.add("seleccionada");
+      casillaSeleccionada = idx;
+      // Aquí puedes poner selector de monstruo o menú contextual
+      // Por ejemplo: monstruosPorCasilla[idx] = "Malseto";
+    }
+  </script>
+</body>
+</html>
